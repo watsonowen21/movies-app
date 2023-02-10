@@ -1,9 +1,9 @@
 import React from "react";
 import { Provider } from "react-redux";
 import store from "./store";
-import MovieList from "./app/Movies/MovieList";
-import GenreList from "./app/Genres/GenreList";
-import { HashRouter as Router, Routes, Route, Link } from "react-router-dom";
+import Movie from "./app/Movies/Movie";
+import Genre from "./app/Genres/Genre";
+import { HashRouter as Router, Routes, Route } from "react-router-dom";
 import NavigationBar from "./app/components/NavigationBar";
 
 const App = () => {
@@ -12,8 +12,8 @@ const App = () => {
       <Router>
         <NavigationBar />
         <Routes>
-          <Route path="/" element={<MovieList />} />
-          <Route path="/genres" element={<GenreList />} />
+          <Route path="/" element={<Movie />} />
+          <Route path="/genres" element={<Genre />} />
         </Routes>
       </Router>
     </Provider>
