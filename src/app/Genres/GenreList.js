@@ -1,38 +1,57 @@
 import "bootstrap/dist/css/bootstrap.min.css";
-import React from "react";
-import { useSelector } from "react-redux";
-import { Button, Table } from "react-bootstrap";
+import React, { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchGenres } from "../../store/actions/genre-actions";
+import GenreModal from "./GenreModal";
+import TableList from "../components/TableList";
+import { Button } from "react-bootstrap";
 
-const GenreList = (props) => {
+const GenreList = () => {
+  const dispatch = useDispatch();
+  const error = useSelector((state) => state.genre.error);
+  const [show, setShow] = useState(false);
+  const [selectedItem, setSelectedItem] = useState({});
+
   const genres = useSelector((state) => state.genre.genres);
+  const headers = ["Id", "Name", "Actions"];
+
+  const data = genres.map((genre) => [
+    genre.id,
+    genre.name,
+    <>
+      <Button onClick={() => handleEdit(genre)}>Edit</Button>
+      <Button variant="secondary" onClick={() => handleDelete(genre)}>
+        Delete
+      </Button>
+    </>,
+  ]);
+
+  const handleClose = () => setShow(false);
+
+  const handleEdit = (genre) => {
+    setSelectedItem(genre);
+    setShow(true);
+  };
+
+  const handleDelete = (genre) => {
+    alert(genre.name);
+  };
+
+  useEffect(() => {
+    dispatch(fetchGenres());
+  }, [dispatch]);
 
   return (
-    <Table striped bordered hover>
-      <thead>
-        <tr>
-          <th scope="col">#</th>
-          <th scope="col">Name</th>
-          <th scope="col">Actions</th>
-        </tr>
-      </thead>
-      <tbody>
-        {genres.map((item) => (
-          <tr key={item.id}>
-            <td>{item.id}</td>
-            <td>{item.name}</td>
-            <td>
-              <Button onClick={() => props.handleEdit(item)}>Edit</Button>
-              <Button
-                variant="secondary"
-                onClick={() => props.handleDelete(item)}
-              >
-                Delete
-              </Button>
-            </td>
-          </tr>
-        ))}
-      </tbody>
-    </Table>
+    <div className="container">
+      <h1 className="text-primary">Genre List</h1>
+      {error && <p>An error occured: {error.message}</p>}
+      <TableList headers={headers} data={data} />
+      <GenreModal
+        showModal={show}
+        closeModal={handleClose}
+        selectedItem={selectedItem}
+      />
+    </div>
   );
 };
 

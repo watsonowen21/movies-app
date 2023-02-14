@@ -1,30 +1,27 @@
 import React from "react";
 import { Modal, Button } from "react-bootstrap";
+import GenreForm from "./GenreForm";
 
 const GenreModal = (props) => {
+  function handleSubmit() {
+    props.closeModal();
+  }
+
   return (
     <Modal show={props.showModal} onHide={props.closeModal}>
       <Modal.Header closeButton>
         <Modal.Title>Edit {props.selectedItem.name}</Modal.Title>
       </Modal.Header>
       <Modal.Body>
-        <form>
-          <div className="form-group">
-            <label htmlFor="name">Name</label>
-            <input
-              type="text"
-              className="form-control"
-              id="name"
-              defaultValue={props.selectedItem.name}
-            />
-          </div>
-        </form>
+        <GenreForm item={props.selectedItem} onClose={props.closeModal} />
       </Modal.Body>
       <Modal.Footer>
         <Button variant="secondary" onClick={props.closeModal}>
           Close
         </Button>
-        <Button variant="primary">Save</Button>
+        <Button variant="primary" type="submit" form="myForm">
+          Save
+        </Button>
       </Modal.Footer>
     </Modal>
   );
