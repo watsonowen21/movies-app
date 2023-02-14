@@ -3,14 +3,16 @@ import { Modal, Button } from "react-bootstrap";
 import GenreForm from "./GenreForm";
 
 const GenreModal = (props) => {
-  function handleSubmit() {
-    props.closeModal();
-  }
-
   return (
     <Modal show={props.showModal} onHide={props.closeModal}>
       <Modal.Header closeButton>
-        <Modal.Title>Edit {props.selectedItem.name}</Modal.Title>
+        <Modal.Title>
+          {props.selectedItem ? (
+            <div>Edit Genre</div>
+          ) : (
+            <div>Add New Genre</div>
+          )}
+        </Modal.Title>
       </Modal.Header>
       <Modal.Body>
         <GenreForm item={props.selectedItem} onClose={props.closeModal} />

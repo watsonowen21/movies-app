@@ -1,8 +1,8 @@
 import React from "react";
 import { ErrorMessage, Formik, Field, Form } from "formik";
-import * as Yup from "yup";
 import { useDispatch } from "react-redux";
-import { updateGenre } from "../../store/actions/genre-actions";
+import { addGenre, updateGenre } from "../../store/actions/genre-actions";
+import GenreFormValidation from "./GenreFormValidation";
 
 function GenreForm(props) {
   const dispatch = useDispatch();
@@ -19,11 +19,13 @@ function GenreForm(props) {
   return (
     <Formik
       initialValues={{ id: genre.id, name: genre.name }}
-      validationSchema={Yup.object({
-        name: Yup.string().required("Required"),
-      })}
+      validationSchema={GenreFormValidation}
       onSubmit={(values, { setSubmitting }) => {
-        dispatch(updateGenre(values));
+        if (values.id > 0) {
+          dispatch(updateGenre(values));
+        } else {
+          dispatch(addGenre(values));
+        }
         setSubmitting(false);
         props.onClose();
       }}

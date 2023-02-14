@@ -5,6 +5,7 @@ import MovieList from "./app/Movies/MovieList";
 import GenreList from "./app/Genres/GenreList";
 import { HashRouter as Router, Routes, Route } from "react-router-dom";
 import NavigationBar from "./app/components/NavigationBar";
+import { ToastContainer } from "react-toastify";
 
 const App = () => {
   return (
@@ -16,6 +17,7 @@ const App = () => {
           <Route path="/genres" element={<GenreList />} />
         </Routes>
       </Router>
+      <ToastContainer position="bottom-center" />
     </Provider>
   );
 };

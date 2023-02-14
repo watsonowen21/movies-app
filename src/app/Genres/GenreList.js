@@ -1,18 +1,18 @@
 import "bootstrap/dist/css/bootstrap.min.css";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchGenres } from "../../store/actions/genre-actions";
+import { deleteGenre, fetchGenres } from "../../store/actions/genre-actions";
 import GenreModal from "./GenreModal";
 import TableList from "../components/TableList";
 import { Button } from "react-bootstrap";
+import "react-toastify/dist/ReactToastify.css";
 
 const GenreList = () => {
   const dispatch = useDispatch();
-  const error = useSelector((state) => state.genre.error);
+  const { genres, loading } = useSelector((state) => state.genre);
   const [show, setShow] = useState(false);
   const [selectedItem, setSelectedItem] = useState({});
 
-  const genres = useSelector((state) => state.genre.genres);
   const headers = ["Id", "Name", "Actions"];
 
   const data = genres.map((genre) => [
@@ -26,7 +26,14 @@ const GenreList = () => {
     </>,
   ]);
 
-  const handleClose = () => setShow(false);
+  const handleClose = () => {
+    setShow(false);
+  };
+
+  const handleAdd = () => {
+    setSelectedItem();
+    setShow(true);
+  };
 
   const handleEdit = (genre) => {
     setSelectedItem(genre);
@@ -34,23 +41,33 @@ const GenreList = () => {
   };
 
   const handleDelete = (genre) => {
-    alert(genre.name);
+    if (window.confirm("Do you really want to delete: " + genre.name)) {
+      dispatch(deleteGenre(genre.id));
+    }
   };
 
   useEffect(() => {
-    dispatch(fetchGenres());
-  }, [dispatch]);
+    if (genres.length === 0) {
+      dispatch(fetchGenres());
+    }
+  }, [dispatch, genres]);
 
   return (
     <div className="container">
       <h1 className="text-primary">Genre List</h1>
-      {error && <p>An error occured: {error.message}</p>}
-      <TableList headers={headers} data={data} />
-      <GenreModal
-        showModal={show}
-        closeModal={handleClose}
-        selectedItem={selectedItem}
-      />
+      <Button onClick={() => handleAdd()}>Add New Genre</Button>
+      {loading ? (
+        <p>Loading...</p>
+      ) : (
+        <div>
+          <TableList headers={headers} data={data} />
+          <GenreModal
+            showModal={show}
+            closeModal={handleClose}
+            selectedItem={selectedItem}
+          />
+        </div>
+      )}
     </div>
   );
 };

@@ -1,27 +1,34 @@
 import {
+  ADD_GENRE_SUCCESS,
+  DELETE_GENRE_SUCCESS,
+  FETCH_GENRES_REQUEST,
   FETCH_GENRES_SUCCESS,
-  FETCH_GENRES_ERROR,
   UPDATE_GENRE_SUCCESS,
-  UPDATE_GENRE_ERROR,
 } from "../actions/genre-actions";
 
 const initialState = {
   genres: [],
-  error: null,
+  loading: false,
 };
 
 const genreReducer = (state = initialState, action) => {
   switch (action.type) {
+    case FETCH_GENRES_REQUEST:
+      return {
+        ...state,
+        loading: true,
+      };
     case FETCH_GENRES_SUCCESS:
       return {
         ...state,
         genres: action.genres,
-        error: null,
+        loading: false,
       };
-    case FETCH_GENRES_ERROR:
+    case ADD_GENRE_SUCCESS:
       return {
         ...state,
-        error: action.error,
+        genres: state.genres.concat(action.genre),
+        loading: false,
       };
     case UPDATE_GENRE_SUCCESS:
       return {
@@ -31,12 +38,13 @@ const genreReducer = (state = initialState, action) => {
             ? { ...genre, name: action.genre.name }
             : genre
         ),
-        error: null,
+        loading: false,
       };
-    case UPDATE_GENRE_ERROR:
+    case DELETE_GENRE_SUCCESS:
       return {
         ...state,
-        error: action.error,
+        genres: state.genres.filter((genre) => genre.id !== action.id),
+        loading: false,
       };
     default:
       return state;
