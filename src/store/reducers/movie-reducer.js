@@ -1,25 +1,22 @@
-import {
-  FETCH_MOVIES_SUCCESS,
-  FETCH_MOVIES_ERROR,
-} from "../actions/movie-actions";
+import * as types from "../actions/action-types";
 
 const initialState = {
   movies: [],
-  error: null,
+  loading: false,
 };
 
 const movieReducer = (state = initialState, action) => {
   switch (action.type) {
-    case FETCH_MOVIES_SUCCESS:
+    case types.FETCH_MOVIES_REQUEST:
+      return {
+        ...state,
+        loading: true,
+      };
+    case types.FETCH_MOVIES_SUCCESS:
       return {
         ...state,
         movies: action.movies,
-        error: null,
-      };
-    case FETCH_MOVIES_ERROR:
-      return {
-        ...state,
-        error: action.error,
+        loading: false,
       };
     default:
       return state;

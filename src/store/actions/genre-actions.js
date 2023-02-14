@@ -1,39 +1,34 @@
 import axios from "axios";
 import { toast } from "react-toastify";
+import * as types from "./action-types";
 
-export const FETCH_GENRES_REQUEST = "FETCH_GENRES_REQUEST";
-export const FETCH_GENRES_SUCCESS = "FETCH_GENRES_SUCCESS";
-export const ADD_GENRE_SUCCESS = "ADD_GENRE_SUCCESS";
-export const UPDATE_GENRE_SUCCESS = "UPDATE_GENRE_SUCCESS";
-export const DELETE_GENRE_SUCCESS = "DELETE_GENRE_SUCCESS";
-
-export const featchGenresRequest = () => ({
-  type: FETCH_GENRES_REQUEST,
+export const fetchGenresRequest = () => ({
+  type: types.FETCH_GENRES_REQUEST,
 });
 
 export const fetchGenresSuccess = (genres) => ({
-  type: FETCH_GENRES_SUCCESS,
+  type: types.FETCH_GENRES_SUCCESS,
   genres,
 });
 
 export const addGenreSuccess = (genre) => ({
-  type: ADD_GENRE_SUCCESS,
+  type: types.ADD_GENRE_SUCCESS,
   genre,
 });
 
 export const updateGenreSuccess = (genre) => ({
-  type: UPDATE_GENRE_SUCCESS,
+  type: types.UPDATE_GENRE_SUCCESS,
   genre,
 });
 
 export const deleteGenreSuccess = (id) => ({
-  type: DELETE_GENRE_SUCCESS,
+  type: types.DELETE_GENRE_SUCCESS,
   id,
 });
 
 export const fetchGenres = () => {
   return (dispatch) => {
-    dispatch(featchGenresRequest());
+    dispatch(fetchGenresRequest());
     axios
       .get("https://localhost:7023/api/Genres")
       .then((response) => {
@@ -56,10 +51,10 @@ export const addGenre = (genre) => {
       .then((response) => {
         genre.id = response.data.id;
         dispatch(addGenreSuccess(genre));
-        toast.success("Add Genre Successfull");
+        toast.success("Add Genre Successful");
       })
       .catch((error) => {
-        toast.error("Add Genre Not Succesfull");
+        toast.error("Add Genre Not Succesful");
       });
   };
 };
@@ -70,10 +65,10 @@ export const updateGenre = (genre) => {
       .put(`https://localhost:7023/api/Genres/${genre.id}`, genre)
       .then((response) => {
         dispatch(updateGenreSuccess(genre));
-        toast.success("Update Genre Successfull");
+        toast.success("Update Genre Successful");
       })
       .catch((error) => {
-        toast.error("Update Genre Not Succesfull");
+        toast.error("Update Genre Not Succesful");
       });
   };
 };
@@ -87,7 +82,7 @@ export const deleteGenre = (id) => {
         toast.success("Deleted Genre Successful");
       })
       .catch((error) => {
-        toast.error("Delete Genre Not Succesfull");
+        toast.error("Delete Genre Not Succesful");
       });
   };
 };

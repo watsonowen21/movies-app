@@ -1,20 +1,19 @@
 import axios from "axios";
+import * as types from "./action-types";
+import { toast } from "react-toastify";
 
-export const FETCH_MOVIES_SUCCESS = "FETCH_MOVIES_SUCCESS";
-export const FETCH_MOVIES_ERROR = "FETCH_MOVIES_ERROR";
-
-export const fetchMoviesSuccess = (movies) => ({
-  type: FETCH_MOVIES_SUCCESS,
-  movies,
+export const fetchMoviesRequest = () => ({
+  type: types.FETCH_MOVIES_REQUEST,
 });
 
-export const fetchMoviesError = (error) => ({
-  type: FETCH_MOVIES_ERROR,
-  error,
+export const fetchMoviesSuccess = (movies) => ({
+  type: types.FETCH_MOVIES_SUCCESS,
+  movies,
 });
 
 export const fetchMovies = () => {
   return (dispatch) => {
+    dispatch(fetchMoviesRequest());
     axios
       .get("https://localhost:7023/api/Movies")
       .then((response) => {
@@ -25,7 +24,7 @@ export const fetchMovies = () => {
         dispatch(fetchMoviesSuccess(movies));
       })
       .catch((error) => {
-        dispatch(fetchMoviesError(error));
+        toast.error("Error fetching genres: " + error.message);
       });
   };
 };
